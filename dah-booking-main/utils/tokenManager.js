@@ -38,37 +38,30 @@ export async function fetchBookingToken() {
 }
 
 export async function fetchOpenApiToken() {
-    // console.log('fetchOpenApiToken called...')
     let token;
-    const data = {
-        authdata: process.env.GUESTY_AUTH
-    };
-
-    // console.log('Sending Auth Data to openApi:', data);  // Log the data being sent for debugging
+    const params = new URLSearchParams();
+    params.append('grant_type', 'client_credentials');
+    params.append('scope', 'open-api');
+    params.append('client_id', process.env.GUESTY_CLIENT_ID);
+    params.append('client_secret', process.env.GUESTY_CLIENT_SECRET);
 
     try {
-        const response = await fetch('https://ckghosting.com/guesty/token_json', {
+        const response = await fetch('https://open-api.guesty.com/oauth2/token', {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json',  // Use JSON format
+                'Accept': 'application/json',
+                'Content-Type': 'application/x-www-form-urlencoded',
             },
-            body: JSON.stringify(data)  // Convert the data object to JSON string
+            body: params.toString(),
         });
-
-        const tokenArray = await response.json();
-
-        if (response.ok && tokenArray.token) {
-            token = tokenArray.token.data[0].token;  // Extract the token
-            // console.log('Fetched OpenAPI token:', token);
+        const data = await response.json();
+        if (response.ok && data.access_token) {
+            token = data.access_token;
         } else {
-            console.error('api error: 62')
-            // console.error('Invalid token response structure', tokenArray);
+            console.error('api error: open-api token', data);
         }
-
     } catch (error) {
-        console.log('api error: 67')
-        // console.error('Error fetching OpenAPI token:', error);
+        console.error('api error: open-api token fetch', error);
     }
-
     return token;
 }
