@@ -15,6 +15,10 @@ NEXT_PUBLIC_CLIENT_SECRET=<client_secret> \
 npx next build && npx next export -o ../build
 ```
 
+The Next.js configuration now sets `assetPrefix` and `basePath` to
+`/wp-content/plugins/dah-next-plugin/build` so that the exported HTML loads its
+scripts and assets from the plugin directory.
+
 Replace `<client_id>` and `<client_secret>` with your credentials. The exported
 files will be written to `dah-next-plugin/build`.
 

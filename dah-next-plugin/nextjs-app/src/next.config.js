@@ -1,6 +1,10 @@
 
 // Define globals
+const pluginBasePath = '/wp-content/plugins/dah-next-plugin/build';
+
 module.exports = {
+  assetPrefix: pluginBasePath,
+  basePath: pluginBasePath,
   images: {
     domains: ['guesty-listing-images.s3.amazonaws.com', 'res.cloudinary.com', 'img.selfcateringlive.com', 'assets.guesty.com', 'lh3.googleusercontent.com']
   },
