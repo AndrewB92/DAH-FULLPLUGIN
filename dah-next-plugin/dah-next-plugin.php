@@ -1,8 +1,8 @@
 <?php
 /*
 Plugin Name: DAH Next.js Booking
-Description: Integrates the DAH Next.js booking application via shortcodes.
-Version: 0.1.0
+Description: Embeds the exported Next.js booking application via shortcodes.
+Version: 0.2.0
 Author: Codex
 */
 
@@ -10,28 +10,23 @@ if (!defined('ABSPATH')) {
     exit; // Exit if accessed directly
 }
 
-function dah_next_enqueue_scripts() {
-    $build_dir = plugin_dir_url(__FILE__) . 'build/';
-    // Main JS bundle from the exported Next.js app
-    wp_register_script('dah-next-app', $build_dir . 'app.js', array(), null, true);
+function dah_next_iframe($page) {
+    $src = plugins_url('build/' . $page . '.html', __FILE__);
+    return '<iframe src="' . esc_url($src) . '" style="width:100%;height:100vh;border:0;"></iframe>';
 }
-add_action('wp_enqueue_scripts', 'dah_next_enqueue_scripts');
 
 function dah_next_calendar_shortcode($atts = array()) {
-    wp_enqueue_script('dah-next-app');
-    return '<div id="dah-booking-calendar"></div>';
+    return dah_next_iframe('index');
 }
 add_shortcode('dah_booking_calendar', 'dah_next_calendar_shortcode');
 
 function dah_next_prepayment_shortcode($atts = array()) {
-    wp_enqueue_script('dah-next-app');
-    return '<div id="dah-prepayment"></div>';
+    return dah_next_iframe('prepayment');
 }
 add_shortcode('dah_prepayment_page', 'dah_next_prepayment_shortcode');
 
 function dah_next_payment_shortcode($atts = array()) {
-    wp_enqueue_script('dah-next-app');
-    return '<div id="dah-payment"></div>';
+    return dah_next_iframe('payment');
 }
 add_shortcode('dah_payment_page', 'dah_next_payment_shortcode');
 
